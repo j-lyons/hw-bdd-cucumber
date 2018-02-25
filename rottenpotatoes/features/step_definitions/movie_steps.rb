@@ -6,7 +6,6 @@ Given /the following movies exist/ do |movies_table|
     # you should arrange to add that movie to the database here.
     Movie.create!(movie)
   end
-  #fail "Unimplemented"
 end
 
 Then /(.*) seed movies should exist/ do | n_seeds |
@@ -38,10 +37,25 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
       steps %Q{When I check "ratings_#{rating}"}
     end
   end
-  #fail "Unimplemented"
+end
+
+Then /I should see movies rated: (.*)/ do |rating_list|
+  ratings = rating_list.split(", ")
+  Movie.where(rating: ratings).each do |movie|
+    steps %Q{Then I should see "#{movie.title}"}
+  end
+end
+
+Then /I should not see movies rated: (.*)/ do |rating_list|
+  ratings = rating_list.split(", ")
+  Movie.where(rating: ratings).each do |movie|
+    steps %Q{Then I should not see "#{movie.title}"}
+  end
 end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  fail "Unimplemented"
+  Movie.all.each do |movie|
+    steps %Q{Then I should see "#{movie.title}"}
+  end
 end
